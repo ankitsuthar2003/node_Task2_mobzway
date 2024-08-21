@@ -1,0 +1,30 @@
+a<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Live Users</title>
+</head>
+<body>
+    <h1>Live Users</h1>
+    <ul id="userList"></ul>
+
+    <script src="/socket.io/socket.io.js"></script>
+    <script>
+        const socket = io();
+
+        socket.on('updateUserList', (users) => {
+            const userList = document.getElementById('userList');
+            userList.innerHTML = '';
+
+            Object.values(users).forEach(user => {
+                const listItem = document.createElement('li');
+                listItem.textContent = `${user.name} - ${user.socketId}`;
+                userList.appendChild(listItem);
+            });
+        });
+
+        socket.emit('userJoined', { name: 'Test User', email: 'test@example.com' });
+    </script>
+</body>
+</html>
